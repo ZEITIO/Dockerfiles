@@ -9,13 +9,9 @@ RUN apt-get update -y && \
     ca-certificates \
     curl \
     gnupg \
-    imagemagick \
     less \
-    mysql-client \
-    perceptualdiff \
     procps \
     ssh-client \
-    sudo \
     unzip \
     git \
     && \
@@ -27,7 +23,6 @@ RUN apt-get update -y && \
     echo "deb https://deb.nodesource.com/node_10.x stretch main" >/etc/apt/sources.list.d/nodesource.list && \
     apt-get update -y && \
     apt-get --no-install-recommends --no-install-suggests --yes --quiet install \
-        rsync \
         libapr1-dev \
         libaprutil1-dev \
         apache2 \
@@ -52,7 +47,12 @@ RUN apt-get update -y && \
         php7.2-fpm \
         && \
     pip install supervisor-stdout && \
-    rm -rf /etc/supervisor
+    rm -rf /etc/supervisor && \
+    apt-get clean && \
+    apt-get --yes --quiet autoremove --purge && \
+    rm -rf  /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+            /usr/share/doc/* /usr/share/groff/* /usr/share/info/* /usr/share/linda/* \
+            /usr/share/lintian/* /usr/share/locale/* /usr/share/man/*
 
 COPY custom.ini /etc/php/7.2/mods-available/custom.ini
 RUN phpenmod custom && \
@@ -66,13 +66,6 @@ WORKDIR /home/docker/
 
 ADD https://composer.github.io/snapshots.pub /home/docker/.composer/keys.dev.pub
 ADD https://composer.github.io/releases.pub /home/docker/.composer/keys.tags.pub
-
-# Cleanup to reduce image size
-RUN apt-get clean && \
-  apt-get --yes --quiet autoremove --purge && \
-  rm -rf  /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-          /usr/share/doc/* /usr/share/groff/* /usr/share/info/* /usr/share/linda/* \
-          /usr/share/lintian/* /usr/share/locale/* /usr/share/man/*
 
 ENV APP_DIR=/app
 COPY supervisord/ /etc/supervisor
