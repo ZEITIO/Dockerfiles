@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo $(env)
 docker build --build-arg RUBY_VERSION=$RUBY_VERSION NODE_VERSION=$NODE_VERSION -f $DOCKERFILE_PATH -t $IMAGE_NAME .
 
 
