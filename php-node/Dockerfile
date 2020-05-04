@@ -1,5 +1,5 @@
 FROM debian:stretch-slim
-LABEL MAINTAINER="Marian Theisen <mt@zeit.io>"
+LABEL MAINTAINER="Marian Theisen <mt@zeit.dev>"
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -y && \
